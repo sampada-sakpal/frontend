@@ -1,0 +1,8 @@
+.git
+Jenkinsfile
+backend-deployment.yaml
+.gitignore
+Dockerfile
+.dockerignore
+git_create.sh
+frontend-deployment.yaml
