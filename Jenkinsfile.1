@@ -1,5 +1,14 @@
 node('master') {
+   agent {
+     docker { image 'ernesen/migratecf:3.0' }
+   }
     stage('checkout') {
         checkout scm
+    }
+    stage('helm Config view') {
+        sh "helm version --short"
+    }
+    stage('confirm') {
+        slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 }
