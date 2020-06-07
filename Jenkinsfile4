@@ -31,7 +31,8 @@ podTemplate(
         )
     ]
 ) {
-    node('minikube') {
+    //node('minikube') {
+    node {
         def commitId
         stage ('Extract') {
             checkout scm
