@@ -1,4 +1,5 @@
 #!/usr/bin/groovy
+currentBuild.displayName = "frontend-#"+currentBuild.number
 podTemplate(label: 'master', 
   containers: [
     containerTemplate(
