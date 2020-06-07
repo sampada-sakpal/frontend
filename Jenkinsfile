@@ -1,3 +1,5 @@
+currentBuild.displayName = "frontend-#"+currentBuild.number
+
 pipeline {
   environment {
     DOCKER_TAG = getDockerTag()
