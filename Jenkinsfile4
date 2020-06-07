@@ -2,7 +2,7 @@
 currentBuild.displayName = "frontend-#"+currentBuild.number
 
 podTemplate(
-    label: 'minikube',
+    label: 'master',
     inheritFrom: 'default',
     containers: [
         containerTemplate(
