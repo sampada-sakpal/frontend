@@ -18,7 +18,7 @@ podTemplate(label: 'master',
   ]
 )
 {
-  node ('twistlock-example-builder') {
+  node ('master') {
     stage ('Pull image') { 
       container('alpine') {
         sh """
@@ -26,15 +26,6 @@ podTemplate(label: 'master',
              -X POST "http:/v1.24/images/create?fromImage=nginx:stable-alpine"
         """
       }
-    }
-    stage ('Twistlock scan') { 
-        twistlockScan image: 'nginx:stable-alpine',
-                    compliancePolicy: 'critical',
-                    ...
-    }
-    stage ('Twistlock publish') {
-        twistlockPublish image: 'nginx:stable-alpine',
-                    ...
     }
   }
 }
