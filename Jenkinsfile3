@@ -22,8 +22,7 @@ podTemplate(label: 'master',
     stage ('Pull image') { 
       container('alpine') {
         sh """
-        curl --unix-socket /var/run/docker.sock \ 
-             -X POST "http:/v1.24/images/create?fromImage=nginx:stable-alpine"
+        echo "This is a simple test with podTemplate"
         """
       }
     }
