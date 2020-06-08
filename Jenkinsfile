@@ -2,15 +2,11 @@ currentBuild.displayName = "frontend-#"+currentBuild.number
 
 pipeline {
   environment {
-    DOCKER_TAG = getDockerTag()
-    registry = "ernesen/frontend"
     registryCredential = 'DockerCredentials'
-    dockerImage = ''
     KUBECONFIG = "$JENKINS_HOME/config"
-    BUILD_NUMBER_V = ''
     project = 'frontend'
     hubUser = 'ernesen'
-    ImageTag = "${env.BUILD_NUMBER}"
+    imageTag = "${env.BUILD_NUMBER}.0"
   }
   
   agent {
@@ -26,48 +22,20 @@ pipeline {
          }
        }
     }
-/*
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER.0"
-        }
-      }
-    }
 
-    stage('Deploy Image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-            dockerImage = docker.build registry + ":latest"
-            dockerImage.push()
-          }
-        }
-      }
-    }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $registry:$BUILD_NUMBER.0"
-      }
-    }
- */
      stage('dockerBuild') {
       steps{
-        dockerBuild(project, hubUser,ImageTag, registryCredential)
+        dockerBuild(project, hubUser,imageTag, registryCredential)
       }
     }
      stage('dockerCleanup') {
       steps{
-        dockerCleanup(project, hubUser, ImageTag)
-        //sh "echo dockerCleanup"
+        dockerCleanup(project, hubUser, imageTag)
       }
     }    
     stage('Kubectl Config view') {
       steps{
         sh "export KUBECONFIG"
-        //sh "kubectl version --short"
-        //sh "kubectl config get-contexts"
         sh "kubectl apply -f  ./frontend_deployment.yaml"
       }
     }
@@ -103,9 +71,9 @@ def notify(status){
     )
 }
 
-def dockerBuild(String project, String hubUser, String ImageTag, String registryCredential) {
+def dockerBuild(String project, String hubUser, String imageTag, String registryCredential) {
     sh "docker image build -t ${hubUser}/${project} ."
-    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${ImageTag}"
+    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${imageTag}"
     sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:latest"
     withCredentials([usernamePassword(
             credentialsId: "${registryCredential}",
@@ -114,17 +82,16 @@ def dockerBuild(String project, String hubUser, String ImageTag, String registry
     )]) {
         sh "docker login -u '$USER' -p '$PASS'"
     }
-    sh "docker image push ${hubUser}/${project}:${ImageTag}"
+    sh "docker image push ${hubUser}/${project}:${imageTag}"
     sh "docker image push ${hubUser}/${project}:latest"
 }
 
-def dockerCleanup(String project, String hubUser, String ImageTag) {
-    sh "docker rmi ${hubUser}/${project}:${ImageTag}"
+def dockerCleanup(String project, String hubUser, String imageTag) {
+    sh "docker rmi ${hubUser}/${project}:${imageTag}"
     sh "docker rmi ${hubUser}/${project}:latest"
 }
 
-def gitCheckout(Map stageParams) {
- 
+def gitCheckout(Map stageParams) { 
     checkout([
         $class: 'GitSCM',
         branches: [[name:  stageParams.branch ]],
