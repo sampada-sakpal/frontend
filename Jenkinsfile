@@ -1,5 +1,13 @@
 currentBuild.displayName = "frontend-#"+currentBuild.number
-
+library(
+  identifier: 'jenkins-shared-library',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/ernesen/jenkins-shared-library.git'
+    ]
+  )
+)
 pipeline {
   environment {
     registryCredential = 'DockerCredentials'
@@ -52,7 +60,7 @@ pipeline {
     }
   }
 }
-
+/*
 def getDockerTag(){
     def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
     return tag
@@ -98,3 +106,4 @@ def gitCheckout(Map stageParams) {
         userRemoteConfigs: [[ url: stageParams.url ]]
     ])
   }
+*/
