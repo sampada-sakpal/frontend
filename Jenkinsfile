@@ -8,6 +8,8 @@ pipeline {
     dockerImage = ''
     KUBECONFIG = "$JENKINS_HOME/config"
     BUILD_NUMBER_V = ''
+    project = 'frontend'
+    hubUser = 'ernesen'
   }
   
   agent {
@@ -23,6 +25,7 @@ pipeline {
          }
        }
     }
+/*
     stage('Building image') {
       steps{
         script {
@@ -30,6 +33,7 @@ pipeline {
         }
       }
     }
+
     stage('Deploy Image') {
       steps{
         script {
@@ -46,7 +50,17 @@ pipeline {
         sh "docker rmi $registry:$BUILD_NUMBER.0"
       }
     }
-
+ */
+     stage('dockerBuild') {
+      steps{
+        dockerBuild(project, hubUser)
+      }
+    }
+     stage('dockerCleanup') {
+      steps{
+        dockerCleanup(project, hubUser)
+      }
+    }    
     stage('Kubectl Config view') {
       steps{
         sh "export KUBECONFIG"
@@ -86,3 +100,32 @@ def notify(status){
         <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
     )
 }
+
+def dockerBuild(String project, String hubUser) {
+    sh "docker image build -t ${hubUser}/${project} ."
+    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${ImageTag}"
+    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:latest"
+    withCredentials([usernamePassword(
+            credentialsId: "docker",
+            usernameVariable: "USER",
+            passwordVariable: "PASS"
+    )]) {
+        sh "docker login -u '$USER' -p '$PASS'"
+    }
+    sh "docker image push ${hubUser}/${project}:${ImageTag}"
+    sh "docker image push ${hubUser}/${project}:latest"
+}
+
+def dockerCleanup(String project, String hubUser) {
+    sh "docker rmi ${hubUser}/${project}:${ImageTag}"
+    sh "docker rmi ${hubUser}/${project}:latest"
+}
+
+def gitCheckout(Map stageParams) {
+ 
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name:  stageParams.branch ]],
+        userRemoteConfigs: [[ url: stageParams.url ]]
+    ])
+  }
