@@ -10,7 +10,7 @@ pipeline {
     BUILD_NUMBER_V = ''
     project = 'frontend'
     hubUser = 'ernesen'
-    ImageTag = {env.BUILD_NUMBER}
+    //ImageTag = {env.BUILD_NUMBER}
   }
   
   agent {
@@ -54,12 +54,12 @@ pipeline {
  */
      stage('dockerBuild') {
       steps{
-        dockerBuild(project, hubUser)
+        dockerBuild(project, hubUser, {env.BUILD_NUMBER})
       }
     }
      stage('dockerCleanup') {
       steps{
-        dockerCleanup(project, hubUser)
+        dockerCleanup(project, hubUser, {env.BUILD_NUMBER})
       }
     }    
     stage('Kubectl Config view') {
@@ -102,7 +102,7 @@ def notify(status){
     )
 }
 
-def dockerBuild(String project, String hubUser) {
+def dockerBuild(String project, String hubUser, String ImageTag) {
     sh "docker image build -t ${hubUser}/${project} ."
     sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${ImageTag}"
     sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:latest"
@@ -117,7 +117,7 @@ def dockerBuild(String project, String hubUser) {
     sh "docker image push ${hubUser}/${project}:latest"
 }
 
-def dockerCleanup(String project, String hubUser) {
+def dockerCleanup(String project, String hubUser, String ImageTag) {
     sh "docker rmi ${hubUser}/${project}:${ImageTag}"
     sh "docker rmi ${hubUser}/${project}:latest"
 }
