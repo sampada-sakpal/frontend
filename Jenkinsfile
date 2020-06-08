@@ -54,12 +54,12 @@ pipeline {
  */
      stage('dockerBuild') {
       steps{
-        dockerBuild(project, hubUser, {env.BUILD_NUMBER})
+        dockerBuild(project, hubUser, ${env.BUILD_NUMBER})
       }
     }
      stage('dockerCleanup') {
       steps{
-        dockerCleanup(project, hubUser, {env.BUILD_NUMBER})
+        dockerCleanup(project, hubUser, ${env.BUILD_NUMBER})
       }
     }    
     stage('Kubectl Config view') {
