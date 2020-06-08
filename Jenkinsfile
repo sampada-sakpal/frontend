@@ -10,7 +10,7 @@ pipeline {
     BUILD_NUMBER_V = ''
     project = 'frontend'
     hubUser = 'ernesen'
-    //ImageTag = {env.BUILD_NUMBER}
+    ImageTag = "${env.BUILD_NUMBER}"
   }
   
   agent {
@@ -54,12 +54,12 @@ pipeline {
  */
      stage('dockerBuild') {
       steps{
-        dockerBuild(project, hubUser,"${env.BUILD_NUMBER}")
+        dockerBuild(project, hubUser,ImageTag)
       }
     }
      stage('dockerCleanup') {
       steps{
-        dockerCleanup(project, hubUser, "${env.BUILD_NUMBER}")
+        dockerCleanup(project, hubUser, ImageTag)
       }
     }    
     stage('Kubectl Config view') {
