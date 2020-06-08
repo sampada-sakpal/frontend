@@ -54,22 +54,13 @@ pipeline {
  */
      stage('dockerBuild') {
       steps{
-        //dockerBuild(project, hubUser,ImageTag)
-        withCredentials([usernamePassword(credentialsId: registryCredential, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-  // available as an env variable, but will be masked if you try to print it out any which way
-  // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
-  sh 'echo $PASSWORD'
-  // also available as a Groovy variable
-  echo USERNAME
-  // or inside double quotes for string interpolation
-  echo "username is $USERNAME"
-}
+        dockerBuild(project, hubUser,ImageTag, registryCredential)
       }
     }
      stage('dockerCleanup') {
       steps{
-        //dockerCleanup(project, hubUser, ImageTag)
-        sh "echo dockerCleanup"
+        dockerCleanup(project, hubUser, ImageTag)
+        //sh "echo dockerCleanup"
       }
     }    
     stage('Kubectl Config view') {
@@ -112,12 +103,12 @@ def notify(status){
     )
 }
 
-def dockerBuild(String project, String hubUser, String ImageTag) {
+def dockerBuild(String project, String hubUser, String ImageTag, String registryCredential) {
     sh "docker image build -t ${hubUser}/${project} ."
     sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${ImageTag}"
     sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:latest"
     withCredentials([usernamePassword(
-            credentialsId: "docker",
+            credentialsId: "${registryCredential}",
             usernameVariable: "USER",
             passwordVariable: "PASS"
     )]) {
