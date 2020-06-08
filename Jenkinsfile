@@ -69,6 +69,7 @@ pipeline {
      stage('dockerCleanup') {
       steps{
         //dockerCleanup(project, hubUser, ImageTag)
+        sh "echo dockerCleanup"
       }
     }    
     stage('Kubectl Config view') {
