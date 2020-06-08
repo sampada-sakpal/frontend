@@ -10,6 +10,7 @@ pipeline {
     BUILD_NUMBER_V = ''
     project = 'frontend'
     hubUser = 'ernesen'
+    ImageTag = currentBuild.number
   }
   
   agent {
