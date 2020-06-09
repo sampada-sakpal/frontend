@@ -1,7 +1,7 @@
 currentBuild.displayName = "frontend-#"+currentBuild.number
 
 library(
-  identifier: 'jenkins-shared-library',
+  identifier: 'jenkins-shared-library@v1.0',
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
