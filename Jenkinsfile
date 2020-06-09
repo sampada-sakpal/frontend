@@ -48,7 +48,7 @@ pipeline {
     }    
     stage('Kubectl deploy') {
       steps{       
-        kubectlDeploy('./frontend_deployment.yaml')
+        kubeDeploy('./frontend_deployment.yaml')
       }
     }
     stage('Helm Config view') {
