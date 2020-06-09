@@ -1,4 +1,6 @@
-currentBuild.displayName = "frontend-#"+currentBuild.number
+def PROJECT = "frontend"
+
+currentBuild.displayName = "$PROJECT-#"+currentBuild.number
 
 library(
   identifier: 'jenkins-shared-library@v1.0',
@@ -13,14 +15,15 @@ library(
 pipeline {
     environment {
     registryCredential = 'DockerCredentials'
-    KUBECONFIG = "$JENKINS_HOME/config"
-    project = 'frontend'
+    project = "$PROJECT"
     hubUser = 'ernesen'
     imageTag = "${env.BUILD_NUMBER}.0"
+    DOCKER_IMAGE = 'ernesen/migratecf:3.0'
+    KUBE_FILE = "./frontend_deployment.yaml"
   }
     
   agent {
-    docker { image 'ernesen/migratecf:3.0' }
+    docker { image "$DOCKER_IMAGE" }
   }
 
   stages {    
@@ -43,10 +46,9 @@ pipeline {
         dockerCleanup(project, hubUser, imageTag)
       }
     }    
-    stage('Kubectl Config view') {
-      steps{
-        sh "export KUBECONFIG"
-        sh "kubectl apply -f  ./frontend_deployment.yaml"
+    stage('Kubectl deploy') {
+      steps{       
+        kubectlApply("$KUBE_FILE")
       }
     }
     stage('Helm Config view') {
