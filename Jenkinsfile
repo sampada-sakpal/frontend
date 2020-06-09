@@ -1,4 +1,7 @@
+@Library('jenkins-shared-library')_
 currentBuild.displayName = "frontend-#"+currentBuild.number
+
+/*
 library(
   identifier: 'jenkins-shared-library@1.0.4',
   retriever: modernSCM(
@@ -8,6 +11,8 @@ library(
     ]
   )
 )
+*/
+
 pipeline {
   environment {
     registryCredential = 'DockerCredentials'
