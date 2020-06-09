@@ -1,4 +1,4 @@
-@Library('jenkins-shared-library')_
+//@Library('jenkins-shared-library')_
 
 pipeline {
     agent {
@@ -129,3 +129,6 @@ def gitCheckout(Map stageParams) {
     ])
   }
 */
+def dockerVersion(){
+    sh "docker version"   
+}
