@@ -18,9 +18,9 @@ pipeline {
     }
 }
 */
-/*
+
 library(
-  identifier: 'jenkins-shared-library@1.0.4',
+  identifier: 'jenkins-shared-library',
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
@@ -28,7 +28,7 @@ library(
     ]
   )
 )
-*/
+
 
 pipeline {
   environment {
@@ -86,55 +86,3 @@ pipeline {
     }
   }
 }
-
-/*
-def getDockerTag(){
-    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
-    return tag
-}
-
-def getContext(environment) {
-    return (env.BRANCH_NAME == 'master') ? environment : 'dev'
-}
-
-def notify(status){
-    emailext (
-      to: "ernese@sg.ibm.com",
-      subject: "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-        <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
-    )
-}
-
-def dockerBuild(String project, String hubUser, String imageTag, String registryCredential) {
-    sh "docker image build -t ${hubUser}/${project} ."
-    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:${imageTag}"
-    sh "docker tag ${hubUser}/${project} ${hubUser}/${project}:latest"
-    withCredentials([usernamePassword(
-            credentialsId: "${registryCredential}",
-            usernameVariable: "USER",
-            passwordVariable: "PASS"
-    )]) {
-        sh "docker login -u '$USER' -p '$PASS'"
-    }
-    sh "docker image push ${hubUser}/${project}:${imageTag}"
-    sh "docker image push ${hubUser}/${project}:latest"
-}
-
-def dockerCleanup(String project, String hubUser, String imageTag) {
-    sh "docker rmi ${hubUser}/${project}:${imageTag}"
-    sh "docker rmi ${hubUser}/${project}:latest"
-}
-
-def gitCheckout(Map stageParams) { 
-    checkout([
-        $class: 'GitSCM',
-        branches: [[name:  stageParams.branch ]],
-        userRemoteConfigs: [[ url: stageParams.url ]]
-    ])
-  }
-
-def dockerVersion(){
-    sh "docker version"   
-}
-*/
