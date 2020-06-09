@@ -25,7 +25,7 @@ pipeline {
   agent {
     docker { image 'ernesen/migratecf:3.0' }
   }
-
+/*
   stages {    
     stage('Confirm') {
        steps{
@@ -45,7 +45,8 @@ pipeline {
       steps{
         dockerCleanup(project, hubUser, imageTag)
       }
-    }    
+    }  
+  */
     stage('Kubectl deploy') {
       steps{       
         kubeDeploy("./frontend_deployment.yaml")
