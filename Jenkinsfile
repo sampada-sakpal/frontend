@@ -50,10 +50,11 @@ pipeline {
   */
     stage('Kubectl deploy') {
       steps{       
-        //kubeDeploy("./frontend_deployment.yaml")
-        sayHello "Ernese Norelus"
+        sayHello("./frontend_deployment.yaml")
+        //sayHello "Ernese Norelus"
       }
     }
+ /*
     stage('Helm Config view') {
       steps{
         sh "helm version --short"
@@ -65,5 +66,6 @@ pipeline {
         notify('Send Slack notifications')
       }
     }
+*/
   }
 }
