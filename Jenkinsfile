@@ -16,14 +16,14 @@ pipeline {
     environment {
     registryCredential = 'DockerCredentials'
     project = "$PROJECT"
-    hubUser = 'ernesen'
+    hubUser = "ernesen"
     imageTag = "${env.BUILD_NUMBER}.0"
-    DOCKER_IMAGE = 'ernesen/migratecf:3.0'
-    KUBE_FILE = "./frontend_deployment.yaml"
+    docker_image = "ernesen/migratecf:3.0"
+    kube_file = "./frontend_deployment.yaml"
   }
     
   agent {
-    docker { image DOCKER_IMAGE }
+    docker { image docker_image }
   }
 
   stages {    
@@ -48,7 +48,7 @@ pipeline {
     }    
     stage('Kubectl deploy') {
       steps{       
-        kubectlApply(KUBE_FILE)
+        kubectlApply(kube_file)
       }
     }
     stage('Helm Config view') {
