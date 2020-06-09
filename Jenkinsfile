@@ -16,10 +16,10 @@ pipeline {
     environment {
     registryCredential = 'DockerCredentials'
     project = "$PROJECT"
-    hubUser = "ernesen"
+    hubUser = 'ernesen'
     imageTag = "${env.BUILD_NUMBER}.0"
-    docker_image = "ernesen/migratecf:3.0"
-    kube_file = "./frontend_deployment.yaml"
+    docker_image = 'ernesen/migratecf:3.0'
+    kube_file = './frontend_deployment.yaml'
   }
     
   agent {
