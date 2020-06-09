@@ -1,0 +1,65 @@
+
+def PROJECT = "frontend"
+
+currentBuild.displayName = "$PROJECT-#"+currentBuild.number
+
+library(
+  identifier: 'jenkins-shared-library@v1.0',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/ernesen/jenkins-shared-library.git'
+    ]
+  )
+)
+
+pipeline {
+    environment {
+    registryCredential = 'DockerCredentials'
+    project = "$PROJECT"
+    hubUser = 'ernesen'
+    imageTag = "${env.BUILD_NUMBER}.0"
+    dockerImage = ''
+    registry = ${project}:/${project}
+  }
+    
+  agent {
+    docker { image 'ernesen/migratecf:3.0' }
+  }
+  stages {
+    stage('Build') {
+       steps {
+         sh 'npm install'
+       }
+    }
+    stage('Test') {
+      steps {
+        sh 'npm test'
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":${imageTag}"
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+            dockerImage = docker.build registry + ":latest"
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:${imageTag}"
+        sh "docker rmi $registry:latest
+      }
+    }
+  }
+}
