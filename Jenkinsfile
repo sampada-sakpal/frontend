@@ -1,6 +1,11 @@
+currentBuild.displayName = "frontend-#"+currentBuild.number
+
 //@Library('jenkins-shared-library')_
 
 pipeline {
+    libraries {
+        'jenkins-shared-library'
+    }
     agent {
         docker {
            image 'ernesen/migratecf:3.0'
