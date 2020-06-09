@@ -1,0 +1,28 @@
+# Stage 1: Use separate small container to build
+FROM node:10-alpine as builder
+
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+WORKDIR /app
+
+# Cache the global packages - use specific versions for consistency
+RUN yarn global add gulp-cli@2.2.0 modclean@3.0.0-beta.1
+
+# Copy only the dependency definitions
+COPY package.json yarn.lock ./
+
+# Only re-install if package.json or yarn.lock change
+# We also need dev dependencies for "gulp compile" to work
+RUN yarn install
+
+# Copy the code after installing dependencies - Note! .dockerignore 
+COPY . .
+# Compile and optimise dependencies
+RUN gulp compile \
+  && rm -rf node_modules \
+  && yarn install --production \
+  && modclean -r
+
+CMD ["yarn", "dev"]
+
+# Prepare the bundle folder
+#RUN ./bundle.sh
