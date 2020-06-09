@@ -50,7 +50,8 @@ pipeline {
   */
     stage('Kubectl deploy') {
       steps{       
-        kubeDeploy("./frontend_deployment.yaml")
+        //kubeDeploy("./frontend_deployment.yaml")
+        sayHello "Ernese Norelus"
       }
     }
     stage('Helm Config view') {
