@@ -1,7 +1,5 @@
 currentBuild.displayName = "frontend-#"+currentBuild.number
-
-//@Library('jenkins-shared-library')_
-
+/*
 pipeline {
     libraries {
         lib('jenkins-shared-library')
@@ -19,9 +17,7 @@ pipeline {
         }
     }
 }
-/*
-currentBuild.displayName = "frontend-#"+currentBuild.number
-
+*/
 /*
 library(
   identifier: 'jenkins-shared-library@1.0.4',
@@ -32,7 +28,7 @@ library(
     ]
   )
 )
-
+*/
 
 pipeline {
   environment {
@@ -42,7 +38,11 @@ pipeline {
     hubUser = 'ernesen'
     imageTag = "${env.BUILD_NUMBER}.0"
   }
-  
+    
+  libraries {
+        lib('jenkins-shared-library')
+  }
+    
   agent {
     docker { image 'ernesen/migratecf:3.0' }
   }
@@ -86,7 +86,7 @@ pipeline {
     }
   }
 }
-*/
+
 /*
 def getDockerTag(){
     def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
