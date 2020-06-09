@@ -23,7 +23,7 @@ pipeline {
   }
     
   agent {
-    docker { image "$DOCKER_IMAGE" }
+    docker { image DOCKER_IMAGE }
   }
 
   stages {    
@@ -48,7 +48,7 @@ pipeline {
     }    
     stage('Kubectl deploy') {
       steps{       
-        kubectlApply("$KUBE_FILE")
+        kubectlApply(KUBE_FILE)
       }
     }
     stage('Helm Config view') {
