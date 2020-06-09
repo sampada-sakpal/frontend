@@ -20,7 +20,7 @@ pipeline {
     hubUser = 'ernesen'
     imageTag = "${env.BUILD_NUMBER}.0"
     dockerImage = ''
-    registry = ${project}:/${project}
+    registry = "${project}:/${project}"
   }
     
   agent {
