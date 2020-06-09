@@ -1,4 +1,15 @@
-@Library('jenkins-shared-library') _
+//@Library('jenkins-shared-library') _
+
+@Library('jenkins-shared-library')_
+
+stage('Demo') {
+
+  echo 'Hello World'
+
+  sayHello 'Ernese'
+
+}
+/*
 currentBuild.displayName = "frontend-#"+currentBuild.number
 
 /*
@@ -11,7 +22,7 @@ library(
     ]
   )
 )
-*/
+
 
 pipeline {
   environment {
@@ -65,6 +76,7 @@ pipeline {
     }
   }
 }
+*/
 /*
 def getDockerTag(){
     def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
