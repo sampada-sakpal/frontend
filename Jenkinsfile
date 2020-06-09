@@ -48,7 +48,7 @@ pipeline {
     }    
     stage('Kubectl deploy') {
       steps{       
-        kubectlApply(kube_file)
+        kubectlDeploy(kube_file)
       }
     }
     stage('Helm Config view') {
