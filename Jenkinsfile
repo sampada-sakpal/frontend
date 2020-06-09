@@ -18,12 +18,12 @@ pipeline {
     project = "$PROJECT"
     hubUser = 'ernesen'
     imageTag = "${env.BUILD_NUMBER}.0"
-    docker_image = 'ernesen/migratecf:3.0'
+    //docker_image = 'ernesen/migratecf:3.0'
     kube_file = './frontend_deployment.yaml'
   }
     
   agent {
-    docker { image docker_image }
+    docker { image 'ernesen/migratecf:3.0' }
   }
 
   stages {    
