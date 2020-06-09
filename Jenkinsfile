@@ -1,13 +1,18 @@
 //@Library('jenkins-shared-library') _
 
-@Library('jenkins-shared-library')_
-
-stage('Demo') {
-
-  echo 'Hello World'
-
-  sayHello 'Ernese'
-
+pipeline {
+    agent {
+        docker {
+           image 'ernesen/migratecf:3.0'
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'docker version' 
+            }
+        }
+    }
 }
 /*
 currentBuild.displayName = "frontend-#"+currentBuild.number
