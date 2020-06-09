@@ -4,7 +4,7 @@ currentBuild.displayName = "frontend-#"+currentBuild.number
 
 pipeline {
     libraries {
-        'jenkins-shared-library'
+        lib('jenkins-shared-library')
     }
     agent {
         docker {
