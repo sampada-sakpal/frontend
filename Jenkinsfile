@@ -133,7 +133,8 @@ def gitCheckout(Map stageParams) {
         userRemoteConfigs: [[ url: stageParams.url ]]
     ])
   }
-*/
+
 def dockerVersion(){
     sh "docker version"   
 }
+*/
