@@ -25,8 +25,9 @@ pipeline {
   agent {
     docker { image 'ernesen/migratecf:3.0' }
   }
+
+  stages {  
 /*
-  stages {    
     stage('Confirm') {
        steps{
         script {
