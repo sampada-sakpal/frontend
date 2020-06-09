@@ -1,23 +1,4 @@
 currentBuild.displayName = "frontend-#"+currentBuild.number
-/*
-pipeline {
-    libraries {
-        lib('jenkins-shared-library')
-    }
-    agent {
-        docker {
-           image 'ernesen/migratecf:3.0'
-        }
-    }
-    stages {
-        stage('Build') { 
-            steps {
-                dockerVersion() 
-            }
-        }
-    }
-}
-*/
 
 library(
   identifier: 'jenkins-shared-library',
@@ -29,9 +10,8 @@ library(
   )
 )
 
-
 pipeline {
-  environment {
+    environment {
     registryCredential = 'DockerCredentials'
     KUBECONFIG = "$JENKINS_HOME/config"
     project = 'frontend'
@@ -39,9 +19,9 @@ pipeline {
     imageTag = "${env.BUILD_NUMBER}.0"
   }
     
-  libraries {
-        lib('jenkins-shared-library')
-  }
+  //libraries {
+  //      lib('jenkins-shared-library')
+  //}
     
   agent {
     docker { image 'ernesen/migratecf:3.0' }
