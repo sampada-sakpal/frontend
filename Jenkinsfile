@@ -19,10 +19,6 @@ pipeline {
     imageTag = "${env.BUILD_NUMBER}.0"
   }
     
-  //libraries {
-  //      lib('jenkins-shared-library')
-  //}
-    
   agent {
     docker { image 'ernesen/migratecf:3.0' }
   }
