@@ -17,7 +17,7 @@ pipeline {
     environment {
     registryCredential = 'DockerCredentials'
     project = "$PROJECT"
-    hubUser = 'ernesen'
+    hubUser = 'sampada-sakpal'
     imageTag = "${env.BUILD_NUMBER}.0"
     dockerImage = ''
     registry = "${project}:/${project}"
